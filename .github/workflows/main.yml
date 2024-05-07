@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: gautampatel14/workflow
-          token: ${{ secrets.CUSTOM_TOKEN }}
+          token: ${{secrets.CUSTOM_TOKEN}}
           path: workflow
 
       - name: Pull Docker Image from Docker Hub
@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: gautampatel14/workflow
-          token: ${{ secrets.CUSTOM_TOKEN }}
+          token: ${{secrets.CUSTOM_TOKEN}}
           path: workflow
 
       - name: Run API Call with Error Handling
@@ -60,8 +60,8 @@ jobs:
       - name: Checkout Private Workflow Repository
         uses: actions/checkout@v3
         with:
-          repository: your-username/workflow
-          token: ${{ secrets.CUSTOM_TOKEN }}
+          repository: gautampatel14/workflow
+          token: ${{secrets.CUSTOM_TOKEN}}
           path: workflow
 
       - name: Download API Response Artifact
