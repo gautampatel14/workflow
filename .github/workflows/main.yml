@@ -39,6 +39,14 @@ jobs:
           docker run --rm -v $(pwd)/workflow:/app/workflow gautampatel14/custom-python-docker:v1.0 python /app/workflow/api_call.py
         continue-on-error: false
 
+      - name: List files to confirm creation
+        run: |
+          ls -R workflow  # Check if response.json exists
+
+      - name: List files to confirm creation
+        run: |
+          ls -R /app/workflow/  # Check if response.json exists
+
       - name: Upload API Response Artifact
         if: success()
         uses: actions/upload-artifact@v3
