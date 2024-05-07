@@ -10,18 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Main Repository
-        uses: actions/checkout@v3
-
-      - name: Checkout Private Workflow Repository
-        uses: actions/checkout@v3
-        with:
-          repository: gautampatel14/workflow
-          token: ${{secrets.CUSTOM_TOKEN}}
-          path: workflow
-
+        uses: actions/checkout@v3  # Required to access the current repository
+      
       - name: Pull Docker Image from Docker Hub
         run: |
-          docker pull gautampatel14/custom-python-docker
+          docker pull gautampatel14/custom-python-docker  # Pulling custom Docker image from Docker Hub
 
   make_api_call:
     needs: pull_docker_image
@@ -33,18 +26,17 @@ jobs:
       - name: Checkout Private Workflow Repository
         uses: actions/checkout@v3
         with:
-          repository: gautampatel14/workflow
-          token: ${{secrets.CUSTOM_TOKEN}}
+          repository: gautampatel14/workflow  # Ensure correct repository access
           path: workflow
 
       - name: Run API Call with Error Handling
         run: |
-          set -e
+          set -e  # Ensures script stops on errors
           docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker python /app/workflow/init/api_call.py
-        continue-on-error: false
+        continue-on-error: false  # Ensures this step stops on error
 
       - name: Upload API Response Artifact
-        if: success()
+        if: success()  # Only execute if previous step succeeds
         uses: actions/upload-artifact@v3
         with:
           name: api_response
@@ -61,7 +53,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: gautampatel14/workflow
-          token: ${{secrets.CUSTOM_TOKEN}}
           path: workflow
 
       - name: Download API Response Artifact
