@@ -1,6 +1,6 @@
 name: Workflow with Custom Python Docker Image
 
-on: [workflow_call]
+on: [push]
 
 jobs:
   pull_docker_image:
