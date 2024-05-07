@@ -1,0 +1,96 @@
+name: Workflow with Custom Python Docker Image
+
+on: [workflow_call]
+
+jobs:
+  pull_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout Private Workflow Repository
+        uses: actions/checkout@v3
+        with:
+          repository: gautampatel14/workflow
+          token: ${{ secrets.CUSTOM_TOKEN }}
+          path: workflow
+
+      - name: Pull Docker Image from Docker Hub
+        run: |
+          docker pull gautampatel14/custom-python-docker
+
+  make_api_call:
+    needs: pull_docker_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout Private Workflow Repository
+        uses: actions/checkout@v3
+        with:
+          repository: gautampatel14/workflow
+          token: ${{ secrets.CUSTOM_TOKEN }}
+          path: workflow
+
+      - name: Run API Call with Error Handling
+        run: |
+          set -e
+          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker python /app/workflow/init/api_call.py
+        continue-on-error: false
+
+      - name: Upload API Response Artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: api_response
+          path: response.json
+
+  modify_response:
+    needs: make_api_call
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout Private Workflow Repository
+        uses: actions/checkout@v3
+        with:
+          repository: your-username/workflow
+          token: ${{ secrets.CUSTOM_TOKEN }}
+          path: workflow
+
+      - name: Download API Response Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: api_response
+
+      - name: Run Modify Response with Error Handling
+        run: |
+          set -e
+          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker python /app/workflow/init/modify_response.py
+        continue-on-error: false
+
+      - name: Upload Modified Response Artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: modified_response
+          path: modified_response.json
+
+      - name: Set Output Variable
+        id: set-output
+        if: success()
+        run: |
+          OUTPUT=$(cat modified_response.json)
+          echo "::set-output name=modified_output::$OUTPUT"
+
+  print_output:
+    needs: modify_response
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Modified Output
+        if: success()
+        run: |
+          echo "${{ needs.modify_response.outputs.modified_output }}"
