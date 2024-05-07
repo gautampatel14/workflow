@@ -14,7 +14,7 @@ jobs:
       
       - name: Pull Docker Image from Docker Hub
         run: |
-          docker pull gautampatel14/custom-python-docker  # Pulling custom Docker image from Docker Hub
+          docker pull gautampatel14/custom-python-docker:v1.0  # Pulling custom Docker image from Docker Hub
 
   make_api_call:
     needs: pull_docker_image
