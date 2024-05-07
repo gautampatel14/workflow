@@ -16,9 +16,7 @@ def make_api_call(url):
 
         print(f"Error making API call: {e}")
         raise
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON response: {e}")
-        raise
+
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         raise
