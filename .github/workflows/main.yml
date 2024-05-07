@@ -32,7 +32,7 @@ jobs:
       - name: Run API Call with Error Handling
         run: |
           set -e  # Ensures script stops on errors
-          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker python /app/workflow/init/api_call.py
+          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker:v1.0 python /app/workflow/init/api_call.py
         continue-on-error: false  # Ensures this step stops on error
 
       - name: Upload API Response Artifact
@@ -63,7 +63,7 @@ jobs:
       - name: Run Modify Response with Error Handling
         run: |
           set -e
-          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker python /app/workflow/init/modify_response.py
+          docker run --rm -v $(pwd):/app gautampatel14/custom-python-docker:v1.0 python /app/workflow/init/modify_response.py
         continue-on-error: false
 
       - name: Upload Modified Response Artifact
