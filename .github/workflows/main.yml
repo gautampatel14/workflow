@@ -88,7 +88,7 @@ jobs:
           OUTPUT=$(cat workflow/modified_response.json)
           echo "::set-output name=modified_output::$OUTPUT"
 
-  print_output:
+  display_output:
     needs: modify_response
     runs-on: ubuntu-latest
     steps:
